@@ -9,7 +9,7 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
 
 clab deploy -t Research-01.clab.yml
 
-Same goes for destroying the lab
+Same goes for destroying the lab.
 
 clab destroy -t Research-01.clab.yml
 
