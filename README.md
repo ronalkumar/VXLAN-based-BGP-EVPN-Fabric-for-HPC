@@ -23,3 +23,5 @@ The Linux client uses Almquist Shell can be accessed as regular containers and c
 
 sudo docker exec -it alpine /bin/ash
 
+# Telemtery 
+Pending
