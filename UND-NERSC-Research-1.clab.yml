@@ -1,0 +1,382 @@
+#This is the a clab YAML file
+# topology documentation: https://github.com/ron-nersc/UND-NERSC-Collaboration
+#
+#Information contained within this script is for the UND and NERSC collaboration team.
+#Author: Ronal Kumar [ron@lbl.gov]
+#            \
+#             \
+#              ^__^
+#              (oo)\_______
+#              (__)        )\
+#                 ||----- |
+#                 ||     ||
+
+name: 1
+prefix: ""
+
+mgmt:
+  network: mgmt_oob                 # management network name
+  bridge: clab_oob                  # rename default clab backing bridge for the management network
+  ipv4-subnet: 10.6.1.0/24
+  ipv4-range: 10.6.1.0/24           # ipv4 range - 36 nodes count
+
+topology:
+  kinds:
+    nokia_srlinux:                  # nokia srlinux
+      type: ixrd3l                  # 32 100GE QSFP28, 2 SFP+
+      image: ghcr.io/nokia/srlinux:24.10.1
+    ceos:                           # arista cEOS
+      image: ceos:4.32.3M
+      env:
+        CLAB_MGMT_VRF: MGMT
+    #sonic-vs:                       # SONiC NOS
+    #  image: sonic-vs:202411
+    linux:                          # alpine linux
+      #image: alpine:latest
+      image: ghcr.io/srl-labs/network-multitool
+      #env:
+      #  PS1: '\u@\h:\w\$ '
+
+  # NERSC primary site 1
+  nodes:   
+    primary-border-1:                       # primary site border router 1
+      group: primary
+      kind: nokia_srlinux
+      mgmt-ipv4: 10.6.1.30
+      startup-config: configs/primary-border-1.cfg          
+    primary-border-2:                       # primary site border router 2
+      group: primary
+      kind: nokia_srlinux
+      startup-config: configs/primary-border-2.cfg
+      mgmt-ipv4: 10.6.1.31      
+    primary-evpn-spine-1:                   # primary site spine 1 arista
+      group: primary 
+      kind: ceos      
+      mgmt-ipv4: 10.6.1.32
+      startup-config: configs/primary-evpn-spine-1.cfg
+    primary-evpn-spine-2:                   # primary site spine 2 nokia srlinux
+      group: primary
+      kind: nokia_srlinux
+      mgmt-ipv4: 10.6.1.33
+      startup-config: configs/primary-evpn-spine-2.cfg
+    primary-evpn-leaf-1:                    # primary site leaf 1 arista
+      group: primary
+      kind: ceos      
+      mgmt-ipv4: 10.6.1.34
+      startup-config: configs/primary-evpn-leaf-1.cfg         
+    primary-evpn-leaf-2:                    # primary site leaf 2 arista
+      group: primary
+      kind: ceos    
+      mgmt-ipv4: 10.6.1.35
+      startup-config: configs/primary-evpn-leaf-2.cfg
+    primary-evpn-leaf-3:                    # primary site leaf 3 nokia srlinux
+      group: primary
+      kind: nokia_srlinux    
+      mgmt-ipv4: 10.6.1.36
+      startup-config: configs/primary-evpn-leaf-3.cfg
+    primary-evpn-leaf-4:                    # primary site leaf 4 nokia srlinux
+      group: primary
+      kind: nokia_srlinux    
+      mgmt-ipv4: 10.6.1.37
+      startup-config: configs/primary-evpn-leaf-4.cfg  
+    primary-compute-1:                      # processing node 1
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.38   
+      exec:
+        - ip address add 10.10.4.101/22 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.4.1 dev eth1
+        - iperf3 -s -p 5201 -D > iperf3.log         
+    primary-compute-2:                      # processing node 2
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.39    
+      exec:
+        - ip address add 10.10.4.102/22 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.4.1 dev eth1
+        - iperf3 -s -p 5201 -D > iperf3.log               
+    primary-compute-3:                      #processing node 3
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.40      
+      exec:
+        - ip address add 10.10.4.103/22 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.4.1 dev eth1 
+        - iperf3 -s -p 5201 -D > iperf3.log            
+    primary-compute-4:                      # processing node 4
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.41
+      exec:
+        - ip address add 10.10.4.104/22 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.4.1 dev eth1  
+        - iperf3 -s -p 5201 -D > iperf3.log            
+    primary-stretchedresource-1:            # primary stretchedresource 1
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.42
+      exec:
+        - ip address add 10.10.8.101/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.8.1 dev eth1       
+    primary-stretchedresource-2:            # primary stretchedresource 1
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.43
+      exec:
+        - ip address add 10.10.8.102/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.8.1 dev eth1         
+    primary-consensus-as-a-service-1:            # primary consensus-as-a-service 1
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.44
+      exec:
+        - ip address add 10.10.8.201/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.8.1 dev eth1        
+    primary-telemetry-1:                    # primary site telemetry 1
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.50
+    primary-telemetry-2:                    # primary site telemetry 2
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.51
+
+  # NERSC scaled-down backup site
+    backup-border-1:                 # backup site border router 1 nokia srlinux
+      group: backup
+      kind: nokia_srlinux
+      mgmt-ipv4: 10.6.1.60
+      startup-config: configs/backup-border-1.cfg           
+    backup-evpn-spine-1:             # backup site spine 1 arista
+      group: backup 
+      kind: ceos      
+      mgmt-ipv4: 10.6.1.61
+      startup-config: configs/backup-evpn-spine-1.cfg  
+    backup-evpn-leaf-1:              # backup site leaf 1 arista
+      group: backup 
+      kind: ceos      
+      mgmt-ipv4: 10.6.1.62
+      startup-config: configs/backup-evpn-leaf-1.cfg  
+    backup-compute-5:                # processing node 5
+      group: backup
+      kind: linux
+      mgmt-ipv4: 10.6.1.63     
+      exec:
+        - ip address add 10.10.4.105/22 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.4.1 dev eth1      
+        - iperf3 -s -p 5201 -D > iperf3.log      
+    backup-compute-6:                # processing node 6
+      group: backup
+      kind: linux
+      mgmt-ipv4: 10.6.1.64
+      exec:
+        - ip address add 10.10.4.106/22 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.4.1 dev eth1 
+        - iperf3 -s -p 5201 -D > iperf3.log              
+    backup-stretchedresource-3:      # stretchedresource 3
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.65
+      exec:
+        - ip address add 10.10.8.103/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.8.1 dev eth1        
+    backup-stretchedresource-4:      # stretchedresource 4
+      group: primary
+      kind: linux
+      mgmt-ipv4: 10.6.1.66
+      exec:
+        - ip address add 10.10.8.104/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.8.1 dev eth1  
+    backup-consensus-as-a-service-2:            # consensus-as-a-service 2
+      group: backup
+      kind: linux
+      mgmt-ipv4: 10.6.1.67
+      exec:
+        - ip address add 10.10.8.202/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.10.8.1 dev eth1 
+
+    # UND site 
+    und-gateway:                     # und site gateway
+      group: und
+      kind: ceos
+      mgmt-ipv4: 10.6.1.80
+      startup-config: configs/und-gateway.cfg 
+    und-streaming-host-1:            # und site streaming host 1
+      group: und
+      kind: linux
+      mgmt-ipv4: 10.6.1.81
+      binds:
+        - configs/traffic/1-iperf.sh:/config/1-iperf.sh:ro
+      exec:
+        - ip address add 10.3.3.21/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.3.3.1 dev eth1                     
+    und-streaming-host-2:            # und site streaming host 2
+      group: und
+      kind: linux
+      mgmt-ipv4: 10.6.1.82
+      binds:
+        - configs/traffic/2-iperf.sh:/config/2-iperf.sh:ro      
+      exec:
+        - ip address add 10.3.3.22/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.3.3.1 dev eth1       
+    und-streaming-host-3:            # und site streaming host 3
+      group: und
+      kind: linux
+      mgmt-ipv4: 10.6.1.83
+      binds:
+        - configs/traffic/3-iperf.sh:/config/3-iperf.sh:ro      
+      exec:
+        - ip address add 10.3.3.23/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.3.3.1 dev eth1 
+    und-streaming-host-4:            # und site streaming host 4
+      group: und
+      kind: linux
+      mgmt-ipv4: 10.6.1.84
+      binds:
+        - configs/traffic/4-iperf.sh:/config/4-iperf.sh:ro      
+      exec:
+        - ip address add 10.3.3.24/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.3.3.1 dev eth1 
+    und-streaming-host-5:            # und site streaming host 5
+      group: und
+      kind: linux
+      mgmt-ipv4: 10.6.1.85
+      binds:
+        - configs/traffic/5-iperf.sh:/config/5-iperf.sh:ro      
+      exec:
+        - ip address add 10.3.3.25/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.3.3.1 dev eth1 
+    und-streaming-host-6:            # und site streaming host 6
+      group: und
+      kind: linux
+      mgmt-ipv4: 10.6.1.86
+      binds:
+        - configs/traffic/6-iperf.sh:/config/6-iperf.sh:ro      
+      exec:
+        - ip address add 10.3.3.26/24 dev eth1
+        - ip route add 10.0.0.0/8 via 10.3.3.1 dev eth1 
+
+    # Wide area network connection facilitator
+    wan-cloud:
+      group: wan
+      kind: ceos
+      mgmt-ipv4: 10.6.1.240
+      startup-config: configs/wan-cloud.cfg          
+
+    # Data center Interconnect facilitator
+    datacenter-interconnect:
+      group: interconnect
+      kind: ceos
+      mgmt-ipv4: 10.6.1.250
+      startup-config: configs/datacenter-interconnect.cfg 
+
+    # Telemetry stack
+    gnmic:
+      kind: linux
+      mgmt-ipv4: 10.6.1.151
+      image: ghcr.io/openconfig/gnmic:0.39.1
+      binds:
+        - configs/gnmic/gnmic-config.yml:/gnmic-config.yml:ro
+      cmd: --config /gnmic-config.yml --log subscribe
+      group: telemetry-stack
+
+    prometheus:
+      kind: linux
+      mgmt-ipv4: 10.6.1.152
+      image: quay.io/prometheus/prometheus:v2.54.1
+      binds:
+        - configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      cmd: --config.file=/etc/prometheus/prometheus.yml
+      ports:
+        - 9090:9090
+      group: telemetry-stack
+
+    grafana:
+      kind: linux
+      mgmt-ipv4: 10.6.1.153
+      image: grafana/grafana:11.2.0
+      binds:
+        - configs/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+        - configs/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+        - configs/grafana/dashboards:/var/lib/grafana/dashboards
+      ports:
+        - 3000:3000
+      env:
+        GF_INSTALL_PLUGINS: "andrewbmchugh-flow-panel"
+        # env vars to enable anonymous access
+        GF_ORG_ROLE: "Admin"
+        GF_ORG_NAME: "Main Org"
+        GF_AUTH_ANONYMOUS_ENABLED: "true"
+        GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+        GF_AUTH_ANONYMOUS: "true"
+        GF_AUTH_OAUTH_AUTO_LOGIN: "true"
+      group: telemetry-stack
+
+    #Logging stack
+    promtail:
+      kind: linux
+      mgmt-ipv4: 10.6.1.154
+      image: grafana/promtail:3.2.0
+      binds:
+        - configs/promtail:/etc/promtail
+      cmd: --config.file=/etc/promtail/promtail-config.yml
+      ports:
+        - 9080:9080
+  
+    loki:
+      kind: linux
+      mgmt-ipv4: 10.6.1.155
+      image: grafana/loki:3.2.0
+      binds:
+        - configs/loki:/etc/loki
+      cmd: --config.file=/etc/loki/loki-config.yml
+      ports:
+        - 3100:3100
+
+  links:
+    # NERSC primary site infrastructure connections
+    - endpoints: ["primary-border-1:e1-1", "wan-cloud:eth1"]
+    - endpoints: ["primary-border-1:e1-2", "primary-evpn-spine-1:eth1"]
+    - endpoints: ["primary-border-1:e1-3", "primary-evpn-spine-2:e1-1"]
+    - endpoints: ["primary-border-2:e1-1", "wan-cloud:eth2"]
+    - endpoints: ["primary-border-2:e1-2", "primary-evpn-spine-1:eth2"]
+    - endpoints: ["primary-border-2:e1-3", "primary-evpn-spine-2:e1-2"]
+    - endpoints: ["primary-evpn-spine-1:eth3", "primary-evpn-leaf-1:eth1"]
+    - endpoints: ["primary-evpn-spine-1:eth4", "primary-evpn-leaf-2:eth1"]
+    - endpoints: ["primary-evpn-spine-1:eth5", "primary-evpn-leaf-3:e1-1"]
+    - endpoints: ["primary-evpn-spine-1:eth6", "primary-evpn-leaf-4:e1-1"]
+    - endpoints: ["primary-evpn-spine-2:e1-3", "primary-evpn-leaf-1:eth2"]
+    - endpoints: ["primary-evpn-spine-2:e1-4", "primary-evpn-leaf-2:eth2"]
+    - endpoints: ["primary-evpn-spine-2:e1-5", "primary-evpn-leaf-3:e1-2"]
+    - endpoints: ["primary-evpn-spine-2:e1-6", "primary-evpn-leaf-4:e1-2"]    
+    - endpoints: ["primary-evpn-leaf-1:eth3", "primary-compute-1:eth1"]
+    - endpoints: ["primary-evpn-leaf-2:eth3", "primary-compute-2:eth1"]
+    - endpoints: ["primary-evpn-leaf-3:e1-3", "primary-compute-3:eth1"]
+    - endpoints: ["primary-evpn-leaf-4:e1-3", "primary-compute-4:eth1"]
+    - endpoints: ["primary-evpn-leaf-1:eth4", "primary-stretchedresource-1:eth1"]
+    - endpoints: ["primary-evpn-leaf-2:eth4", "primary-stretchedresource-2:eth1"]
+    - endpoints: ["primary-evpn-leaf-1:eth6", "primary-consensus-as-a-service-1:eth1"]
+    
+    # NERSC backup site infrastructure connections
+    - endpoints: ["backup-border-1:e1-1", "wan-cloud:eth3"]
+    - endpoints: ["backup-border-1:e1-2", "backup-evpn-spine-1:eth1"]
+    - endpoints: ["backup-evpn-spine-1:eth2", "backup-evpn-leaf-1:eth1"]
+    - endpoints: ["backup-evpn-leaf-1:eth2", "backup-compute-5:eth1"]
+    - endpoints: ["backup-evpn-leaf-1:eth3", "backup-compute-6:eth1"]
+    - endpoints: ["backup-evpn-leaf-1:eth4", "backup-stretchedresource-3:eth1"]
+    - endpoints: ["backup-evpn-leaf-1:eth5", "backup-stretchedresource-4:eth1"]
+    - endpoints: ["backup-evpn-leaf-1:eth6", "backup-consensus-as-a-service-2:eth1"]
+    
+    # NERSC datacenter interconnection
+    - endpoints: ["primary-evpn-spine-1:eth10", "datacenter-interconnect:eth1"]
+    - endpoints: ["primary-evpn-spine-2:e1-10", "datacenter-interconnect:eth2"]
+    - endpoints: ["backup-evpn-spine-1:eth10", "datacenter-interconnect:eth3"]
+
+    # UND site infrastructure connections - 3 connections
+    - endpoints: ["und-gateway:eth1", "wan-cloud:eth4"]
+    - endpoints: ["und-gateway:eth2", "und-streaming-host-1:eth1"]
+    - endpoints: ["und-gateway:eth3", "und-streaming-host-2:eth1"]
+    - endpoints: ["und-gateway:eth4", "und-streaming-host-3:eth1"]
+    - endpoints: ["und-gateway:eth5", "und-streaming-host-4:eth1"]
+    - endpoints: ["und-gateway:eth6", "und-streaming-host-5:eth1"]
+    - endpoints: ["und-gateway:eth7", "und-streaming-host-6:eth1"]
