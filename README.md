@@ -92,32 +92,55 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
 *   Wide Area Network container: 
        *   wan-cloud is running cEOS.
 
-1.  Interacting with Arista cEOS containers.
+1.  Interacting with Arista cEOS containers. Username `admin` Password `admin`.
 
-    > Connect to `cEOS` nodes, e.g `primary-evpn-leaf-1` node via SSH: `sudo docker exec -it primary-evpn-leaf-1 Cli` Username `admin` Password `admin`
+    > Connect to `cEOS` nodes, e.g `primary-evpn-leaf-1` node via SSH:
     ```
     sudo docker exec -it primary-evpn-leaf-1 Cli
     ```
-    > Verify underlay BGP peering: `"show bgp summary"` and underlay bgp routes: `"show ip bgp"`
+    > Verify underlay BGP peering:
     ```
     show bgp summary
     ```
+    > Verify underlay bgp routes:
     ```
     show ip bgp
     ```
-    > Verify overlay BGP peering: `"show bgp evpn summary"` and overlay bgp routes: `"show bgp evpn"`
-    >
-    > Verify routing to WAN cloud loopback IP: `"traceroute 10.0.254.1"`
+    > Verify overlay BGP peering:
+    ```
+    show bgp evpn summary
+    ```
+    > Verify overlay bgp routes:
+    ```
+    show bgp evpn
+    ```
+    > Verify routing to WAN cloud loopback IP:
+    ```
+    traceroute 10.0.254.1
+    ```
 
-2.  Interacting with Nokia SR Linux containers.
+2.  Interacting with Nokia SR Linux containers. Username `admin` Password `NokiaSrl1!`.
 
-    > Connect to 'SR Linux' nodes, e.g `primary-evpn-leaf-3` node via SSH: `sudo docker exec -it primary-evpn-leaf-3 sr_cli` Username `admin` Password `NokiaSrl1!`
-    >
-    > Verify underlay and overlay BGP peering: `"show network-instance default protocols bgp neighbor"`
-    >
-    > Verify underlay and overlay bgp routes: `"show network-instance default protocols bgp routes ipv4 summary"` and route table: `"show network-instance route-table all"`
-    >
-    > Verify routing to WAN cloud loopback IP: `"traceroute network-instance default 10.0.254.1"`
+    > Connect to 'SR Linux' nodes, e.g `primary-evpn-leaf-3` node via SSH: 
+    ```
+    sudo docker exec -it primary-evpn-leaf-3 sr_cli
+    ```
+    > Verify underlay and overlay BGP peering:
+    ```
+    show network-instance default protocols bgp neighbor
+    ```
+    > Verify underlay and overlay bgp routes:
+    ```
+    show network-instance default protocols bgp routes ipv4 summary
+    ```
+    > Verify route table: `"show network-instance route-table all"`
+    ```
+    show network-instance route-table all
+    ```    
+    > Verify routing to WAN cloud loopback IP:
+    ```
+    traceroute network-instance default 10.0.254.1
+    ``` 
 
 3.  Interacting with Compute containers.
 
