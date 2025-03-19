@@ -33,7 +33,7 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
 1.  Install Containerlab:
       *   Sudo privileges needed to run containerlab.
       *   Quick setup installs docker, Containerlab and gh (CLI tool) in one go.
-      *   Script has been tested on Ubuntu 20.04
+      *   Script has been tested on Ubuntu 20.04.
 
     ```
     sudo curl -sL https://containerlab.dev/setup | sudo -E bash -s "all"
@@ -95,9 +95,16 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
 1.  Interacting with Arista cEOS containers.
 
     > Connect to `cEOS` nodes, e.g `primary-evpn-leaf-1` node via SSH: `sudo docker exec -it primary-evpn-leaf-1 Cli` Username `admin` Password `admin`
-    >
+    ```
+    sudo docker exec -it primary-evpn-leaf-1 Cli
+    ```
     > Verify underlay BGP peering: `"show bgp summary"` and underlay bgp routes: `"show ip bgp"`
-    >
+    ```
+    show bgp summary
+    ```
+    ```
+    show ip bgp
+    ```
     > Verify overlay BGP peering: `"show bgp evpn summary"` and overlay bgp routes: `"show bgp evpn"`
     >
     > Verify routing to WAN cloud loopback IP: `"traceroute 10.0.254.1"`
@@ -146,7 +153,6 @@ Loopback `10.0.1.0/24`, Point-to-point `10.6.2.0/24`
 
 | Host                    | Router-id / Loopback0 |
 | ----------------------- | --------------------- |
-|                         |                       |
 | primary-border-1        | 10.0.1.1              |
 | primary-border-2        | 10.0.1.2              |
 | primary-evpn-spine-1    | 10.0.1.3              |
@@ -206,19 +212,12 @@ Loopback `10.0.1.0/24`, Point-to-point `10.6.2.0/24`
 | primary-evpn-leaf-1 | primary-evpn-leaf-1:eth3 | primary-compute-1:eth1                | 104  | 10.10.4.101 |
 |                     | primary-evpn-leaf-1:eth4 | primary-stretchedresource-1:eth1      | 108  | 10.10.8.101 |
 |                     | primary-evpn-leaf-1:eth6 | primary-consensus-as-a-service-1:eth1 | 108  | 10.10.8.201 |
-|                     |                          |                                       |      |             |
 | primary-evpn-leaf-2 | primary-evpn-leaf-2:eth3 | primary-compute-2:eth1                | 104  | 10.10.4.102 |
 |                     | primary-evpn-leaf-2:eth4 | primary-stretchedresource-2:eth1      | 108  | 10.10.8.102 |
-|                     |                          |                                       |      |             |
-|                     |                          |                                       |      |             |
 | primary-evpn-leaf-3 | primary-evpn-leaf-3:e1-3 | primary-compute-3:eth1                | 104  | 10.10.4.103 |
-|                     |                          |                                       |      |             |
 | primary-evpn-leaf-4 | primary-evpn-leaf-4:e1-3 | primary-compute-4:eth1                | 104  | 10.10.4.104 |
-|                     |                          |                                       |      |             |
 |                     | primary-evpn-leaf-2:eth5 | primary-telemetry-2:eth1              |      |             |
-|                     |                          |                                       |      |             |
 |                     | primary-evpn-leaf-3:e1-3 | primary-compute-3:eth1                | 104  | 10.10.4.105 |
-|                     |                          |                                       |      |             |
 |                     | primary-evpn-leaf-4:e1-3 | primary-compute-4:eth1                | 104  | 10.10.4.106 |
 
 #### Backup Compute Site - Underlay
@@ -244,6 +243,12 @@ Loopback `10.0.2.0/24`, Point-to-point `10.6.3.0/24`
 |                     | backup-evpn-leaf-1:eth7   | backup-consensus-as-a-service-1:eth1 | VXLAN                |               |
 
 #### Backup Compute Site - Overlay
+
+|          | Subnet       | Vlan | Vni           |
+| -------- | ------------ | ---- | ------------- |
+| Compute  | 10.10.4.0/22 | 104  | 10104         |
+| Resource | 10.10.8.0/24 | 108  | 10108         |
+|          |              |      | default 10100 |
 
 | Host                | Overlay Loopback1 / VXLAN VTEP |
 | ------------------- | -------------------------------|
@@ -358,13 +363,13 @@ The logging infrastructure logs every message that is above Info level. This inc
 
 # Lab Lifecycle
 
-Containerlab easily helps deploy the topology by defining all interlinks and node specific information in one YAML file. This file can be used to deploy the topology by passing it as an argument with the deploy command.
+1.  Deploy the topology by defining all interlinks and node specific information in one YAML file. This file can be used to deploy the topology by passing it as an argument with the deploy command.
 
     ```
     sudo containerlab deploy -t UND-NERSC-Research-1.clab.yml
     ```
 
-Same goes for destroying the lab.
+2.  Destroying the lab.
 
     ```
     sudo containerlab destroy -t UND-NERSC-Research-1.clab.yml --cleanup
