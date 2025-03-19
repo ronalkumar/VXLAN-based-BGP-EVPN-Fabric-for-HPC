@@ -24,7 +24,7 @@ This repository deploys multi-vendor lab by using containerlab to spin up a two-
 *   Docker Engine installed and running (version 27.2.0 or higher). Automatically installed by step 1.
 *   Nokia SR Linux network operating system version 24.10.1. Automatically imported by step 2.
 *   Linux network multi-tool version 0.2.0 or higher. Automatically imported by step 2.
-*   Arista cEOS version 4.32.4M. Requires guest user registration, license agreement acceptance cEOS download from https://www.arista.com/en/support/software-download (cEOS Lab > 4.32 > EOS-4.32.4M > cEOS-lab-4.32.4M.tar.xz)
+*   Arista cEOS version 4.32.4M Requires guest user registration, license agreement acceptance cEOS download from https://www.arista.com/en/support/software-download (cEOS Lab > 4.32 > EOS-4.32.4M > cEOS-lab-4.32.4M.tar.xz)
 
 ### Installation
 
