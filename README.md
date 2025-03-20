@@ -45,7 +45,7 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
 
     ```
     git clone https://github.com/ron-nersc/UND-NERSC-Collaboration.git
-    cd containerlab-UND-NERSC-Collaboration
+    cd UND-NERSC-Collaboration-main
     ```
 
 2.  Docker import Arista cEOS-lab-4.32.4M.tar.xz EOS downloaded from prerequisites:
