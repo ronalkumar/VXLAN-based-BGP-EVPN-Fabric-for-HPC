@@ -68,7 +68,7 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
 
 ### VXLAN based BGP EVPN Multi-site Topology Interaction
 
-<img src="images/UND-NERSC-Lab-Design-V1.0.png" width="750" />
+<img src="images/UND-NERSC-Lab-Design-V1.0.png" width="850" />
 
 *   The topology has a Primary Compute Site, Backup Compute Site and UND site. Primary and Backup Compute sites model a scalable scientific computing facility while UND site models a remote data streaming site, such as University of North Dakota research department.
 *   Data center Interconnect models layer 2 evpn service and connects the Primary and Backup Compute sites.
@@ -133,7 +133,7 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
     ```
     show network-instance default protocols bgp routes ipv4 summary
     ```
-    > Verify route table: `"show network-instance route-table all"`
+    > Verify route table:
     ```
     show network-instance route-table all
     ```    
@@ -142,29 +142,48 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
     traceroute network-instance default 10.0.254.1
     ``` 
 
-3.  Interacting with Compute containers.
+3.  Interacting with Compute, Stretched resource, Consensus-as-a-service and Streaming host Linux containers. Username `user@<name>` Password `multit00l.`.
 
-    > Connect to 'Compute' nodes, e.g `primary-compute-1` node via SSH: `sudo docker exec -it primary-compute-1 bash` Username `user@<name>` Password `multit00l.`
-    >
-    > Verify interfaces: `"ip a"` and routing table: `"route"`
-    >
-    > Verify reachability over evpn to primary-compute-3: `"ping -c 4 10.10.4.103"` and reachability over data center interconnect evpn to backup-compute-5: `"ping -c 4 10.10.4.105"`
-    >
-    > Verify reachability over evpn to primary-stretchedresource-1: `"ping -c 4 10.10.8.101"` and reachability over data center interconnect evpn to backup-stretchedresource-3: `"ping -c 4 10.10.8.103"`
-
-3.  Interacting with Compute, Stretched resource, Consensus-as-a-service and Streaming host Linux containers.
-
-    > Connect to 'Linux' nodes, e.g `primary-compute-1` node via SSH: `sudo docker exec -it primary-compute-1 bash` Username `user@<name>` Password `multit00l.`
-    >
-    > Verify interfaces: `"ip a"` and routing table: `"route"`
-    >
-    > Verify reachability over evpn to primary-compute-3: `"ping -c 4 10.10.4.103"` and reachability over data center interconnect evpn to backup-compute-5: `"ping -c 4 10.10.4.105"`
-    >
-    > Verify reachability over evpn to primary-stretchedresource-1: `"ping -c 4 10.10.8.101"` and reachability over data center interconnect to backup-stretchedresource-3: `"ping -c 4 10.10.8.103"`
-    >
-    > Verify traceroute to backup-stretchedresource-3 over data center interconnect: `"traceroute 10.10.8.103"`
-    >
-    > Verify reachability over wan to und-streaming-host-1: `"ping -c 4 10.3.3.21"` and traceroute to und-streaming-host-1: `"traceroute 10.3.3.21"`
+    > Connect to 'Compute' nodes, e.g `primary-compute-1` node via SSH:
+    ```
+    sudo docker exec -it primary-compute-1 bash
+    ``` 
+    > Verify interfaces:
+    ```
+    ip a
+    ``` 
+    > Verify routing table:
+    ```
+    route
+    ```     
+    > Verify reachability over evpn to `primary-compute-3`:
+    ```
+    ping -c 4 10.10.4.103
+    ``` 
+    > Verify reachability over data center interconnect and extended evpn to `backup-compute-5`:
+    ```
+    ping -c 4 10.10.4.105
+    ```      
+    > Verify reachability over evpn to `primary-stretchedresource-1`:
+    ```
+    ping -c 4 10.10.8.101
+    ``` 
+    > Verify reachability over data center interconnect and extended evpn to `backup-stretchedresource-3`:
+    ```
+    ping -c 4 10.10.8.103
+    ```      
+    > Verify traceroute over data center `interconnect` to `backup-stretchedresource-3`:
+    ```
+    traceroute 10.10.8.103
+    ``` 
+    > Verify reachability over wan to `und-streaming-host-1`:
+    ```
+    ping -c 4 10.3.3.21
+    ``` 
+    > Verify traceroute over `wan` to `und-streaming-host-1`:
+    ```
+    traceroute 10.3.3.21
+    ``` 
 
 ### Topology IP Schema
 
@@ -312,45 +331,80 @@ Loopback `10.0.2.0/24`, Point-to-point `10.6.3.0/24`
 
 1.  Start traffic streaming from `und-streaming-host-1` to `primary-compute-1`.
 
-    > Start traffic streaming: `bash traffic.sh start compute-1`
-    >
-    > Stop traffic streaming: `bash traffic.sh stop all`
+    > Start traffic streaming:
+    ```
+    bash traffic.sh start compute-1
+    ```  
+    > Stop traffic streaming: 
+    ```
+    bash traffic.sh stop all
+    ```      
 
 2.  Start traffic streaming from `und-streaming-host-2` to `primary-compute-2`.
 
-    > Start traffic streaming: `bash traffic.sh start compute-2`
-    >
-    > Stop traffic streaming: `bash traffic.sh stop all`
+    > Start traffic streaming: 
+    ```
+    bash traffic.sh start compute-2
+    ```  
+    > Stop traffic streaming: 
+    ```
+    bash traffic.sh stop all
+    ```      
 
 3.  Start traffic streaming from `und-streaming-host-3` to `primary-compute-3`.
 
-    > Start traffic streaming: `bash traffic.sh start compute-3`
-    >
-    > Stop traffic streaming: `bash traffic.sh stop all`
+    > Start traffic streaming: 
+    ```
+    bash traffic.sh start compute-3
+    ```  
+    > Stop traffic streaming: 
+    ```
+    bash traffic.sh stop all
+    ```      
 
 4.  Start traffic streaming from `und-streaming-host-4` to `primary-compute-4`.
 
-    > Start traffic streaming: `bash traffic.sh start compute-4`
-    >
-    > Stop traffic streaming: `bash traffic.sh stop all`
+    > Start traffic streaming: 
+    ```
+    bash traffic.sh start compute-4
+    ```  
+    > Stop traffic streaming: 
+    ```
+    bash traffic.sh stop all
+    ```      
 
 5.  Start traffic streaming from `und-streaming-host-5` to `primary-compute-5`.
 
-    > Start traffic streaming: `bash traffic.sh start compute-5`
-    >
-    > Stop traffic streaming: `bash traffic.sh stop all`
+    > Start traffic streaming: 
+    ```
+    bash traffic.sh start compute-5
+    ```  
+    > Stop traffic streaming: 
+    ```
+    bash traffic.sh stop all
+    ```      
 
 6.  Start traffic streaming from `und-streaming-host-6` to `primary-compute-6`.
 
-    > Start traffic streaming: `bash traffic.sh start compute-6`
-    >
-    > Stop traffic streaming: `bash traffic.sh stop all`
+    > Start traffic streaming: 
+    ```
+    bash traffic.sh start compute-6
+    ```  
+    > Stop traffic streaming: 
+    ```
+    bash traffic.sh stop all
+    ```      
 
 7.  Start traffic streaming to all 6 compute nodes.
 
-    > Start traffic streaming: `bash traffic.sh start all`
-    >
-    > Stop traffic streaming: `bash traffic.sh stop all`
+    > Start traffic streaming:
+    ```
+    bash traffic.sh start all
+    ```  
+    > Stop traffic streaming:
+    ```
+    bash traffic.sh stop all
+    ```      
 
 # Telemetry Stack
 
