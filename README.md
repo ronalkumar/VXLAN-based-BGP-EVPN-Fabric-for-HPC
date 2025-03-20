@@ -70,11 +70,11 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
 
 <img src="images/UND-NERSC-Lab-Design-V1.0.png" width="850" />
 
-*   The topology has a Primary Compute Site, Backup Compute Site and UND site. Primary and Backup Compute sites model a scalable scientific computing facility while UND site models a remote data streaming site, such as University of North Dakota research department.
+*   The network topology comprises a primary compute site, a backup compute site, and a site at the University of North Dakota. The primary and backup compute sites emulate a scalable scientific computing facility, while the UND site models a remote data streaming location, such as a research department.
 *   Data center Interconnect models layer 2 evpn service and connects the Primary and Backup Compute sites.
 *   The Wide Area Network (WAN) connects all the sites via eBGP AS 65000 and advertises prefixes between the sites.
-*   Primary Compute site advertises Compute subnet 10.10.4.0/22 and Stretched Resource subnet 10.10.8.0/24 to the WAN. These subnets are stretched between the Primary Compute site and Backup Compute site, and are always preferred via the Primary site. Primary Compute site border routers are in BGP AS 65110, spines in BGP AS 65100 and leaves in iBGP AS 65050. Primary Compute site has 4 Compute nodes, 2 Stretched Resource nodes, a telemetry stack with gnmic, prometheus, grafana, and a consensus-as-a-service node.
-*   Backup Compute site advertises Compute subnet 10.10.4.0/22 and Stretched Resource subnet 10.10.8.0/24 to the WAN. These subnets are always preferred via the Primary Compute site, however, if the Primary Compute site is unavailable then traffic flows to the Backup Compute site. Backup site border routers are in BGP AS 65160, spines in BGP AS 65150 and leaves in iBGP AS 65050. Backup Compute site has 2 Compute nodes, 2 Stretched Resource nodes, and a consensus-as-a-service node.
+*   The primary compute site advertises the compute subnet 10.10.4.0/22 and the stretched resource subnet 10.10.8.0/24 into the WAN. These subnets are stretched between the primary and backup compute sites, with the primary site preferred for routing. The primary compute site's border routers are in BGP AS 65110, the spine switches are in BGP AS 65100, and the leaf switches are in iBGP AS 65050. Primary Compute site has 4 Compute nodes, 2 Stretched resource nodes, a telemetry stack with gnmic, prometheus, grafana, and a consensus-as-a-service node.
+*   The backup compute site advertises the compute subnet 10.10.4.0/22 and the stretched resource subnet 10.10.8.0/24 into the WAN. These subnets are normally accessed via the primary compute site. However, if the primary site is unavailable, traffic automatically fails over to the backup compute site. The backup site's border routers are in BGP AS 65160, the spine switches are in BGP AS 65150, and the leaf switches are in iBGP AS 65050. The backup compute site has two compute nodes, two stretched resource nodes, and a consensus-as-a-service node.
 *   UND Research site has 6 streaming hosts and the gateway is in BGP AS 65170. 
 *   Primary Compute site containers: 
        *   primary-evpn-leaf-1, primary-evpn-leaf-2 and primary-evpn-spine-1 are running cEOS.
@@ -191,7 +191,7 @@ Management Subnet for the overall topology: `10.6.1.0/24`
 
 #### Primary Compute Site - Underlay
 
-Loopback `10.0.1.0/24`, Point-to-point `10.6.2.0/24`
+Loopback `10.0.1.0/24` Point-to-point `10.6.2.0/24`
 
 | Host                    | Router-id / Loopback0 |
 | ----------------------- | --------------------- |
@@ -264,7 +264,7 @@ Loopback `10.0.1.0/24`, Point-to-point `10.6.2.0/24`
 
 #### Backup Compute Site - Underlay
 
-Loopback `10.0.2.0/24`, Point-to-point `10.6.3.0/24`
+Loopback `10.0.2.0/24` Point-to-point `10.6.3.0/24`
 
 | Host                | Router-id / Loopback0 |
 | ------------------- | --------------------- |
@@ -315,7 +315,7 @@ Loopback `10.0.2.0/24`, Point-to-point `10.6.3.0/24`
 | und-streaming-host-5 | 10.3.3.25/24 | 3003 |
 | und-streaming-host-6 | 10.3.3.26/24 | 3003 |
 
-| Host        | Router-id | Side A           | Side B                    | Subnet /30 - A, B   |               |
+| Host        | Router-id | Side A           | Side B                    | Subnet /30 - A, B   | BGP AS        |
 | ----------- | --------- | ---------------- | ------------------------- | ------------------- | ------------- |
 | und-gateway | 10.0.3.1  | und-gateway:eth1 | wan-cloud:eth4            | 10.6.4.1 - 10.6.4.2 | 65170 - 65000 |
 |             |           | und-gateway:eth2 | und-streaming-host-1:eth1 | Vlan3003            |               |
@@ -327,7 +327,7 @@ Loopback `10.0.2.0/24`, Point-to-point `10.6.3.0/24`
 
 # Traffic Generation
 
-`iperf3` is available on UND streaming hosts in client mode and Compute nodes in server mode. `traffic.sh` script interacts with the streaming hosts and compute nodes and provides traffic streaming capability. 'Telemetry stack' captures the streaming metrics and is detailed under Telemetry section.
+`iperf3` is available on UND streaming hosts in client mode and Compute nodes in server mode. `traffic.sh` script interacts with the streaming hosts and compute nodes and provides traffic streaming capability. `Telemetry stack` captures the streaming metrics and is detailed under Telemetry section.
 
 1.  Start traffic streaming from `und-streaming-host-1` to `primary-compute-1`.
 
