@@ -77,20 +77,20 @@ Containerlab easily helps deploy the topology by defining all interlinks and nod
 *   The backup compute site advertises the compute subnet 10.10.4.0/22 and the stretched resource subnet 10.10.8.0/24 into the WAN. These subnets are normally accessed via the primary compute site. However, if the primary site is unavailable, traffic automatically fails over to the backup compute site. The backup site's border routers are in BGP AS 65160, the spine switches are in BGP AS 65150, and the leaf switches are in iBGP AS 65050. The backup compute site has two compute nodes, two stretched resource nodes, and a consensus-as-a-service node.
 *   UND Research site has 6 streaming hosts and the gateway is in BGP AS 65170. 
 *   Primary Compute site containers: 
-       *   primary-evpn-leaf-1, primary-evpn-leaf-2 and primary-evpn-spine-1 are running cEOS.
-       *   primary-evpn-leaf-3, primary-evpn-leaf-4, primary-evpn-spine-2, primary-border-1 and primary-border-2 are runing SR Linux.
-       *   primary-compute-1 to 4, primary-stretchedresource-1 to 2, telemetry stack and primary-consensus-as-a-service-1 are running Linux.
+       *   `primary-evpn-leaf-1`, `primary-evpn-leaf-2` and `primary-evpn-spine-1` are running cEOS.
+       *   `primary-evpn-leaf-3`, `primary-evpn-leaf-4`, `primary-evpn-spine-2`, `primary-border-1` and `primary-border-2` are running Nokia SR Linux.
+       *   `primary-compute-1` to `4`, `primary-stretchedresource-1` to `2`, telemetry stack and `primary-consensus-as-a-service-1` are running Linux.
 *   Backup Compute site containers: 
-       *   backup-evpn-leaf-1 and backup-evpn-spine-1 are running cEOS.
-       *   backup-border-1 is runing SR Linux.
-       *   backup-compute-5 to 6, backup-stretchedresource-3 to 4 and backup-consensus-as-a-service-2 are running Linux.       
+       *   `backup-evpn-leaf-1` and `backup-evpn-spine-1` are running cEOS.
+       *   `backup-border-1` is runing Nokia SR Linux.
+       *   `backup-compute-5` to `6`, `backup-stretchedresource-3` to `4` and `backup-consensus-as-a-service-2` are running Linux.       
 *   Data center Interconnect container: 
-       *   datacenter-interconnect is running cEOS and provides layer 2 connectivity to the spines in Primary and Backup sites.
+       *   `datacenter-interconnect` is running cEOS and provides layer 2 connectivity to the spines in Primary and Backup sites.
 *   UND Research site containers: 
-       *   und-streaming-host-1 to 6 are running Linux.
-       *   und-gateway is running cEOS.       
+       *   `und-streaming-host-1` to `6` are running Linux.
+       *   `und-gateway` is running cEOS.       
 *   Wide Area Network container: 
-       *   wan-cloud is running cEOS.
+       *   `wan-cloud` is running cEOS.
 
 1.  Interacting with Arista cEOS containers. Username `admin` Password `admin`.
 
