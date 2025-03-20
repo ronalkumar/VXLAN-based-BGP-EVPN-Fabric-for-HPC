@@ -4,7 +4,7 @@
 
 Research and development of key enabling technologies in the construction of software-defined data center network architecture using VXLAN based BGP EVPN for dynamic workflows in a supercomputing environment.
 
-This repository deploys multi-vendor lab by using containerlab to spin up a two-tier clos topology using Nokia SR Linux and Arista cEOS. BGP is configured in the underlay and for border connections. eBGP is used to emulate the wide area network cloud. Underlay and overlay network uses BGP. This is work in progress.
+This repository deploys multi-vendor lab by using containerlab to spin up ~40 containers in a two-tier multi-site clos topology using Linux, Nokia SR Linux and Arista cEOS. BGP is configured in the underlay and for border connections while eBGP is used for the wide area network. Underlay and overlay network uses BGP.
 
 ## Features
 

@@ -18,7 +18,7 @@ mgmt:
   network: mgmt_oob                 # management network name
   bridge: clab_oob                  # rename default clab backing bridge for the management network
   ipv4-subnet: 10.6.1.0/24
-  ipv4-range: 10.6.1.0/24           # ipv4 range - 36 nodes count
+  ipv4-range: 10.6.1.0/24           # ipv4 range for management network
 
 topology:
   kinds:
