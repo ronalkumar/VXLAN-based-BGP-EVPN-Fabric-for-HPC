@@ -430,7 +430,7 @@ The gnmic configuration file - [gnmic-config.yml](https://github.com/ron-nersc/U
 
 Grafana is another key component of this lab as it provides the visualization for the collected telemetry data. Lab's topology file includes grafana node and configuration parameters such as dashboards, datasources and required plugins. Grafana dashboard provided by this repository provides multiple views on the collected real-time data.
 
-<img src="images/Grafana1.png" width="750" />
+<img src="images/Grafana1.png" width="850" />
 
 # Logging Stack
 
