@@ -1,6 +1,5 @@
 #!/bin/bash
 #
-#Information contained within this script is for the UND and NERSC collaboration team.
 #Author: Ronal Kumar [ron@lbl.gov]
 #            \
 #             \
