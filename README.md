@@ -1,6 +1,6 @@
 # VXLAN-based BGP EVPN Fabric for HPC
 
-**Copyright Notice**
+## Copyright Notice
 
 Software-Defined Data Center Network Architecture using VXLAN-based BGP EVPN for Dynamic Workflows in a Supercomputing Environment (VXLAN-based BGP EVPN Fabric for HPC) Copyright (c) 2025, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy). All rights reserved.
 
